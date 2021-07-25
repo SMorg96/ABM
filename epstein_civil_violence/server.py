@@ -3,14 +3,14 @@ from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.modules import ChartModule
 
 from .model import EpsteinCivilViolence
-from .agent import Citizen, Cop
+from .agent import Citizen, Cop, Radicalizer
 
 
 COP_COLOR = "#000000"
 AGENT_QUIET_COLOR = "#0066CC"
 AGENT_REBEL_COLOR = "#CC0000"
 JAIL_COLOR = "#757575"
-RAD_COLOR = "#808080"
+RAD_COLOR = "#00ff00"
 
 
 def citizen_cop_portrayal(agent):
@@ -63,7 +63,8 @@ canvas_element = CanvasGrid(citizen_cop_portrayal, 40, 40, 480, 480)
 chart_count = ChartModule([
 {"Label":"Quiescent","Color" : AGENT_QUIET_COLOR },
 {"Label": "Active","Color" :AGENT_REBEL_COLOR },
-{"Label": "Jailed","Color" :JAIL_COLOR}
+{"Label": "Jailed","Color" :JAIL_COLOR},
+{"Label": "Radicals","Color" :RAD_COLOR}
 ]
 )
 

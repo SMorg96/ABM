@@ -3,7 +3,7 @@ from mesa.time import RandomActivation
 from mesa.space import Grid
 from mesa.datacollection import DataCollector
 
-from .agent import Cop, Citizen
+from .agent import Cop, Citizen, Radicalizer
 
 
 class EpsteinCivilViolence(Model):
@@ -109,14 +109,16 @@ class EpsteinCivilViolence(Model):
         for agent in model.schedule.agents:
             if agent.breed == "cop":
                 continue
+            if agent.breed == "radicalizer":
+                continue
             if exclude_jailed and agent.jail_sentence:
                 continue
             if agent.condition == condition:
                 count += 1
         return count
     
-     @staticmethod
-    def count_type_radicalized(model):
+    @staticmethod
+    def count_radical(model):
         #count Quiescent && Active.
         count = 0
         for agent in model.schedule.agents:
