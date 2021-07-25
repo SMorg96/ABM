@@ -50,8 +50,16 @@ model_params = dict(
     max_jail_term=1000,
 )
 
+
 canvas_element = CanvasGrid(citizen_cop_portrayal, 40, 40, 480, 480)
-chart_count = ChartModule([Cop, agent.condition == "Quiescent", agent.condition == "Active", agent.condition == "Jailed"])
+chart_count = ChartModule([
+{"Label":"Quiescent","Color" : AGENT_QUIET_COLOR },
+{"Label": "Active","Color" :AGENT_REBEL_COLOR },
+{"Label": "Jailed","Color" :JAIL_COLOR}
+]
+)
+
+
 server = ModularServer(
     EpsteinCivilViolence, [canvas_element, chart_count], "Epstein Civil Violence", model_params
 )
