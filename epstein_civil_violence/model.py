@@ -17,7 +17,8 @@ class EpsteinCivilViolence(Model):
         height=40,
         width=40,
         citizen_density=0.7,
-        cop_density=0.074,
+        cop_density=0.054,
+        radicalizer_density=0.02,
         citizen_vision=7,
         cop_vision=7,
         legitimacy=0.8,
@@ -32,6 +33,7 @@ class EpsteinCivilViolence(Model):
         self.width = width
         self.citizen_density = citizen_density
         self.cop_density = cop_density
+        self.radicalizer_density = radicalizer_density 
         self.citizen_vision = citizen_vision
         self.cop_vision = cop_vision
         self.legitimacy = legitimacy
@@ -47,6 +49,7 @@ class EpsteinCivilViolence(Model):
             "Quiescent": lambda m: self.count_type_citizens(m, "Quiescent"),
             "Active": lambda m: self.count_type_citizens(m, "Active"),
             "Jailed": lambda m: self.count_jailed(m),
+            "Radicals": lambda m: self.count_radical(m),
         }
         agent_reporters = {
             "x": lambda a: a.pos[0],
@@ -60,15 +63,20 @@ class EpsteinCivilViolence(Model):
             model_reporters=model_reporters, agent_reporters=agent_reporters
         )
         unique_id = 0
-        if self.cop_density + self.citizen_density > 1:
+        if self.cop_density + self.citizen_density+ self.radicalizer_density > 1:
             raise ValueError("Cop density + citizen density must be less than 1")
         for (contents, x, y) in self.grid.coord_iter():
-            if self.random.random() < self.cop_density:
+            if self.random.random() < self.cop_density and self.random.random()> self.radicalizer_density :
                 cop = Cop(unique_id, self, (x, y), vision=self.cop_vision)
                 unique_id += 1
                 self.grid[y][x] = cop
                 self.schedule.add(cop)
-            elif self.random.random() < (self.cop_density + self.citizen_density):
+            elif self.random.random() < self.radicalizer_density:
+                rad = Radicalizer(unique_id, self, (x, y), vision=self.cop_vision)
+                unique_id += 1
+                self.grid[y][x] = rad
+                self.schedule.add(rad)
+            elif self.random.random() < (self.cop_density + self.citizen_density+self.radicalizer_density):
                 citizen = Citizen(
                     unique_id,
                     self,
@@ -104,6 +112,15 @@ class EpsteinCivilViolence(Model):
             if exclude_jailed and agent.jail_sentence:
                 continue
             if agent.condition == condition:
+                count += 1
+        return count
+    
+     @staticmethod
+    def count_type_radicalized(model):
+        #count Quiescent && Active.
+        count = 0
+        for agent in model.schedule.agents:
+            if agent.breed == "citizen" and agent.radicalized:
                 count += 1
         return count
 
