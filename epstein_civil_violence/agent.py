@@ -4,56 +4,23 @@ from mesa import Agent
 
 
 class Citizen(Agent):
-    """
-    A member of the general population, may or may not be in active rebellion.
-    Summary of rule: If grievance - risk > threshold, rebel.
-    Attributes:
-        unique_id: unique int
-        x, y: Grid coordinates
-        hardship: Agent's 'perceived hardship (i.e., physical or economic
-            privation).' Exogenous, drawn from U(0,1).
-        regime_legitimacy: Agent's perception of regime legitimacy, equal
-            across agents.  Exogenous.
-        risk_aversion: Exogenous, drawn from U(0,1).
-        threshold: if (grievance - (risk_aversion * arrest_probability)) >
-            threshold, go/remain Active
-        vision: number of cells in each direction (N, S, E and W) that agent
-            can inspect
-        condition: Can be "Quiescent" or "Active;" deterministic function of
-            greivance, perceived risk, and
-        grievance: deterministic function of hardship and regime_legitimacy;
-            how aggrieved is agent at the regime?
-        arrest_probability: agent's assessment of arrest probability, given
-            rebellion
-    """
+    
+    #rebel or quiet
+    #Summary of rule: If grievance - risk > threshold, rebel.
+  
 
     def __init__(
         self,
         unique_id,
         model,
         pos,
-        hardship,
+        hardship, #Agent's 'perceived hardship (i.e., physical or economicprivation).'
         regime_legitimacy,
         risk_aversion,
         threshold,
         vision,
     ):
-        """
-        Create a new Citizen.
-        Args:
-            unique_id: unique int
-            x, y: Grid coordinates
-            hardship: Agent's 'perceived hardship (i.e., physical or economic
-                privation).' Exogenous, drawn from U(0,1).
-            regime_legitimacy: Agent's perception of regime legitimacy, equal
-                across agents.  Exogenous.
-            risk_aversion: Exogenous, drawn from U(0,1).
-            threshold: if (grievance - (risk_aversion * arrest_probability)) >
-                threshold, go/remain Active
-            vision: number of cells in each direction (N, S, E and W) that
-                agent can inspect. Exogenous.
-            model: model instance
-        """
+       #create citizen
         super().__init__(unique_id, model)
         self.breed = "citizen"
         self.pos = pos
@@ -61,16 +28,16 @@ class Citizen(Agent):
         self.regime_legitimacy = regime_legitimacy
         self.risk_aversion = risk_aversion
         self.threshold = threshold
-        self.condition = "Quiescent"
+        self.condition = "Quiescent" #deterministic function of greivanceand  perceived risk
         self.vision = vision
         self.jail_sentence = 0
-        self.grievance = self.hardship * (1 - self.regime_legitimacy)
+        self.grievance = self.hardship * (1 - self.regime_legitimacy) #deterministic function of hardship and regime_legitimacy;
         self.arrest_probability = None
 
     def step(self):
-        """
-        Decide whether to activate, then move if applicable.
-        """
+        #activate?
+        #move if neccesary 
+       
         if self.jail_sentence:
             self.jail_sentence -= 1
             return  # no other changes or movements if agent is in jail.
@@ -91,9 +58,6 @@ class Citizen(Agent):
             self.model.grid.move_agent(self, new_pos)
 
     def update_neighbors(self):
-        """
-        Look around and see who my neighbors are
-        """
         self.neighborhood = self.model.grid.get_neighborhood(
             self.pos, moore=False, radius=1
         )
@@ -103,10 +67,7 @@ class Citizen(Agent):
         ]
 
     def update_estimated_arrest_probability(self):
-        """
-        Based on the ratio of cops to actives in my neighborhood, estimate the
-        p(Arrest | I go active).
-        """
+     
         cops_in_vision = len([c for c in self.neighbors if c.breed == "cop"])
         actives_in_vision = 1.0  # citizen counts herself
         for c in self.neighbors:
@@ -122,36 +83,20 @@ class Citizen(Agent):
 
 
 class Cop(Agent):
-    """
-    A cop for life.  No defection.
-    Summary of rule: Inspect local vision and arrest a random active agent.
-    Attributes:
-        unique_id: unique int
-        x, y: Grid coordinates
-        vision: number of cells in each direction (N, S, E and W) that cop is
-            able to inspect
-    """
+    # Summary of rule: Inspect local vision and arrest a random active agent.
+   
 
     def __init__(self, unique_id, model, pos, vision):
-        """
-        Create a new Cop.
-        Args:
-            unique_id: unique int
-            x, y: Grid coordinates
-            vision: number of cells in each direction (N, S, E and W) that
-                agent can inspect. Exogenous.
-            model: model instance
-        """
+        #new Cop
+    
         super().__init__(unique_id, model)
         self.breed = "cop"
         self.pos = pos
         self.vision = vision
 
     def step(self):
-        """
-        Inspect local vision and arrest a random active agent. Move if
-        applicable.
-        """
+        
+        #check neighbors and arrest a random active agent.
         self.update_neighbors()
         active_neighbors = []
         for agent in self.neighbors:
@@ -170,9 +115,6 @@ class Cop(Agent):
             self.model.grid.move_agent(self, new_pos)
 
     def update_neighbors(self):
-        """
-        Look around and see who my neighbors are.
-        """
         self.neighborhood = self.model.grid.get_neighborhood(
             self.pos, moore=False, radius=1
         )
@@ -180,3 +122,4 @@ class Cop(Agent):
         self.empty_neighbors = [
             c for c in self.neighborhood if self.model.grid.is_cell_empty(c)
         ]
+    
