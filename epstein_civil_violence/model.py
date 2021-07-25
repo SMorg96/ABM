@@ -7,30 +7,10 @@ from .agent import Cop, Citizen
 
 
 class EpsteinCivilViolence(Model):
-    """
-    Model 1 from "Modeling civil violence: An agent-based computational
-    approach," by Joshua Epstein.
-    http://www.pnas.org/content/99/suppl_3/7243.full
-    Attributes:
-        height: grid height
-        width: grid width
-        citizen_density: approximate % of cells occupied by citizens.
-        cop_density: approximate % of calles occupied by cops.
-        citizen_vision: number of cells in each direction (N, S, E and W) that
-            citizen can inspect
-        cop_vision: number of cells in each direction (N, S, E and W) that cop
-            can inspect
-        legitimacy:  (L) citizens' perception of regime legitimacy, equal
-            across all citizens
-        max_jail_term: (J_max)
-        active_threshold: if (grievance - (risk_aversion * arrest_probability))
-            > threshold, citizen rebels
-        arrest_prob_constant: set to ensure agents make plausible arrest
-            probability estimates
-        movement: binary, whether agents try to move at step end
-        max_iters: model may not have a natural stopping point, so we set a
-            max.
-    """
+    #Model source:
+    #http://www.pnas.org/content/99/suppl_3/7243.full
+  
+  
 
     def __init__(
         self,
@@ -107,9 +87,6 @@ class EpsteinCivilViolence(Model):
         self.datacollector.collect(self)
 
     def step(self):
-        """
-        Advance the model by one step and collect data.
-        """
         self.schedule.step()
         # collect data
         self.datacollector.collect(self)
@@ -119,9 +96,7 @@ class EpsteinCivilViolence(Model):
 
     @staticmethod
     def count_type_citizens(model, condition, exclude_jailed=True):
-        """
-        Helper method to count agents by Quiescent/Active.
-        """
+        #count Quiescent && Active.
         count = 0
         for agent in model.schedule.agents:
             if agent.breed == "cop":
@@ -134,9 +109,8 @@ class EpsteinCivilViolence(Model):
 
     @staticmethod
     def count_jailed(model):
-        """
-        Helper method to count jailed agents.
-        """
+       # count jailed 
+       
         count = 0
         for agent in model.schedule.agents:
             if agent.breed == "citizen" and agent.jail_sentence:
