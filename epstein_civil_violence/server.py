@@ -10,6 +10,7 @@ COP_COLOR = "#000000"
 AGENT_QUIET_COLOR = "#0066CC"
 AGENT_REBEL_COLOR = "#CC0000"
 JAIL_COLOR = "#757575"
+RAD_COLOR = "#808080"
 
 
 def citizen_cop_portrayal(agent):
@@ -36,7 +37,13 @@ def citizen_cop_portrayal(agent):
         portrayal["Color"] = COP_COLOR
         portrayal["r"] = 0.5
         portrayal["Layer"] = 1
+   
+    elif type(agent) is Radicalizer:
+        portrayal["Color"] = RAD_COLOR
+        portrayal["r"] = 0.5
+        portrayal["Layer"] = 1
     return portrayal
+
 
 
 model_params = dict(
