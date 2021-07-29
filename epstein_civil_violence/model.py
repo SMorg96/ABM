@@ -42,6 +42,7 @@ class EpsteinCivilViolence(Model):
         self.active_threshold = active_threshold
         self.arrest_prob_constant = arrest_prob_constant
         self.movement = movement
+        self.food_scarcity=food_scarcity
         self.max_iters = max_iters
         self.iteration = 0
         self.schedule = RandomActivation(self)
