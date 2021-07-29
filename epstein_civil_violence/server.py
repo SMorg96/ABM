@@ -56,6 +56,7 @@ model_params = dict(
     cop_vision=7,
     legitimacy=0.8,
     max_jail_term=1000,
+    food_scarcity = .45
 )
 
 
