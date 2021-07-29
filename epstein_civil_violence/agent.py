@@ -19,6 +19,7 @@ class Citizen(Agent):
         risk_aversion,
         threshold,
         vision,
+        education_level,
     ):
        #create citizen
         super().__init__(unique_id, model)
@@ -34,6 +35,7 @@ class Citizen(Agent):
         self.radicalized = False
         self.grievance = self.hardship * (1 - self.regime_legitimacy) #deterministic function of hardship and regime_legitimacy;
         self.arrest_probability = None
+        self.education_level = self.random.randint(0, 3)
 
     def step(self):
         #activate?
