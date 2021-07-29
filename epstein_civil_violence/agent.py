@@ -16,6 +16,7 @@ class Citizen(Agent):
         pos,
         hardship, #Agent's 'perceived hardship (i.e., physical or economicprivation).'
         regime_legitimacy,
+        food_scarcity,
         risk_aversion,
         threshold,
         vision,
@@ -26,6 +27,7 @@ class Citizen(Agent):
         self.breed = "citizen"
         self.pos = pos
         self.hardship = hardship
+        self.food_scarcity = food_scarcity
         self.regime_legitimacy = regime_legitimacy
         self.risk_aversion = risk_aversion
         self.threshold = threshold
@@ -34,8 +36,10 @@ class Citizen(Agent):
         self.jail_sentence = 0
         self.radicalized = False
         self.grievance = self.hardship * (1 - self.regime_legitimacy) #deterministic function of hardship and regime_legitimacy;
+        
         self.arrest_probability = None
         self.education_level = self.random.randint(0, 3)
+       
 
     def step(self):
         #activate?
@@ -101,6 +105,7 @@ class Cop(Agent):
         self.breed = "cop"
         self.pos = pos
         self.vision = vision
+        
 
     def step(self):
         
@@ -134,13 +139,14 @@ class Radicalizer(Agent):
     # Summary of rule: Inspect local vision and arrest a random active agent.
    
 
-    def __init__(self, unique_id, model, pos, vision):
+    def __init__(self, unique_id, model, pos, vision,food_scarcity,hardship):
         #new Cop
     
         super().__init__(unique_id, model)
         self.breed = "radicalizer"
         self.pos = pos
         self.vision = vision
+        self.motivation = (1 - self.food_scarcity)
 
     def step(self):
         
@@ -152,6 +158,7 @@ class Radicalizer(Agent):
                 agent.breed == "citizen"
                 and agent.condition == "Quiescent"
                 and agent.education_level = 3
+                and self.motivation > .6
             ):
                 active_neighbors.append(agent)
         if active_neighbors:
