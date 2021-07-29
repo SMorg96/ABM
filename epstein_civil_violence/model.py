@@ -22,6 +22,7 @@ class EpsteinCivilViolence(Model):
         citizen_vision=7,
         cop_vision=7,
         legitimacy=0.8,
+        food_scarcity = .45
         max_jail_term=1000,
         active_threshold=0.1,
         arrest_prob_constant=2.3,
@@ -72,7 +73,7 @@ class EpsteinCivilViolence(Model):
                 self.grid[y][x] = cop
                 self.schedule.add(cop)
             elif self.random.random() < self.radicalizer_density:
-                rad = Radicalizer(unique_id, self, (x, y), vision=self.cop_vision)
+                rad = Radicalizer(unique_id, self, (x, y), vision=self.cop_vision,food_scarcity=self.food_scarcity)
                 unique_id += 1
                 self.grid[y][x] = rad
                 self.schedule.add(rad)
