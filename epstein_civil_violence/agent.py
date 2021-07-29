@@ -158,7 +158,7 @@ class Radicalizer(Agent):
                 agent.breed == "citizen"
                 and agent.condition == "Quiescent"
                 and agent.education_level = 3
-                and self.motivation > .6
+                and self.motivation < .6
             ):
                 active_neighbors.append(agent)
         if active_neighbors:
