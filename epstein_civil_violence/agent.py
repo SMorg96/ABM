@@ -139,7 +139,7 @@ class Radicalizer(Agent):
     # Summary of rule: Inspect local vision and arrest a random active agent.
    
 
-    def __init__(self, unique_id, model, pos, vision,food_scarcity,hardship):
+    def __init__(self, unique_id, model, pos, vision,food_scarcity):
         #new Cop
     
         super().__init__(unique_id, model)
