@@ -146,6 +146,7 @@ class Radicalizer(Agent):
         self.breed = "radicalizer"
         self.pos = pos
         self.vision = vision
+        self.food_scarcity = food_scarcity
         self.motivation = (1 - self.food_scarcity)
 
     def step(self):
@@ -157,7 +158,7 @@ class Radicalizer(Agent):
             if (
                 agent.breed == "citizen"
                 and agent.condition == "Quiescent"
-                and agent.education_level = 3
+                and agent.education_level == 3
                 and self.motivation < .6
             ):
                 active_neighbors.append(agent)
