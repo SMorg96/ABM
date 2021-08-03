@@ -52,6 +52,7 @@ class EpsteinCivilViolence(Model):
             "Active": lambda m: self.count_type_citizens(m, "Active"),
             "Jailed": lambda m: self.count_jailed(m),
             "Radicals": lambda m: self.count_radical(m),
+            "Terrorist Attacks": lambda m: self.count_attacks(m),
         }
         agent_reporters = {
             "x": lambda a: a.pos[0],
@@ -60,6 +61,7 @@ class EpsteinCivilViolence(Model):
             "jail_sentence": lambda a: getattr(a, "jail_sentence", None),
             "condition": lambda a: getattr(a, "condition", None),
             "arrest_probability": lambda a: getattr(a, "arrest_probability", None),
+            
         }
         self.datacollector = DataCollector(
             model_reporters=model_reporters, agent_reporters=agent_reporters
@@ -136,4 +138,14 @@ class EpsteinCivilViolence(Model):
         for agent in model.schedule.agents:
             if agent.breed == "citizen" and agent.jail_sentence:
                 count += 1
+        return count
+    
+    @staticmethod
+    def count_attacks(model):
+       # count jailed 
+       
+        count = 0
+        for agent in model.schedule.agents:
+            if agent.breed == "citizen"
+                count = count + agent.attacks
         return count
