@@ -36,7 +36,7 @@ class Citizen(Agent):
         self.jail_sentence = 0
         self.radicalized = False
         self.grievance = self.hardship * (1 - self.regime_legitimacy) #deterministic function of hardship and regime_legitimacy;
-        
+        self.attacks = 0
         self.arrest_probability = None
         self.education_level = self.random.randint(0, 3)
        
@@ -60,6 +60,11 @@ class Citizen(Agent):
             self.condition == "Quiescent" and self.radicalized ==True
         ):
             self.condition = "Active"
+            attack = self.random.randint(0, 10)
+            if (
+                attack == 9
+            ):
+                self.attacks = self.attacks +1
         elif (
             self.condition == "Active" and (self.grievance - net_risk) <= self.threshold
         ):
