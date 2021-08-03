@@ -20,7 +20,6 @@ class Citizen(Agent):
         risk_aversion,
         threshold,
         vision,
-        education_level,
     ):
        #create citizen
         super().__init__(unique_id, model)
@@ -60,11 +59,12 @@ class Citizen(Agent):
             self.condition == "Quiescent" and self.radicalized ==True
         ):
             self.condition = "Active"
-            attack = self.random.randint(0, 10)
+            attack = self.random.randint(0, 3)
             if (
-                attack == 9
+                attack ==2
             ):
                 self.attacks = self.attacks +1
+                print(self.attacks)
         elif (
             self.condition == "Active" and (self.grievance - net_risk) <= self.threshold
         ):
